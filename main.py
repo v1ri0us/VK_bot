@@ -121,3 +121,22 @@ for event in longpoll.listen ():
 							else:
 								sender (id , 'Что дальше?')
 								break
+			else:
+				id = event.user_id
+				for event in longpoll.listen ():
+					if event.type == VkEventType.MESSAGE_NEW:
+						if event.to_me:
+							r = randint (0,3)
+							if r == 0:
+								sender (id, 'Я тебя не понял!:(')
+								break
+							elif r == 1:
+								sender (id, 'Прости, можно попроще?')
+								break
+							elif r == 2:
+								sender (id, 'Я тебя не понимаю. Повтори пожалуйста!')
+								break
+	continue
+
+							
+				
