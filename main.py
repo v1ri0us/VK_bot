@@ -92,49 +92,29 @@ for event in longpoll.listen ():
 					elif act == '*':
 						answer = a * b
 						sender (id , 'Твой ответ: ' + str (answer))
+					else:
+						sender(id, 'Ты ввел недопустимое действие. Попробуй снова!')
 				except Exception:
 					id = event.user_id
 					sender (id , "Произошла ошибка при вычислениях!>.< \n Попробуй ввести числа снова!")
-
 			if msg == 'погода':
 				id = event.user_id
-				sender (id , "@id" + str (id) + '(Назови) город, который тебе нужен!("стоп" для остановки)')
+				sender (id , "@id" + str (id) + '(Назови) город, который тебе нужен!')
 				for event in longpoll.listen ():
 					if event.type == VkEventType.MESSAGE_NEW:
 						if event.to_me:
 							place = event.text.lower ()
-							if place != 'стоп':
-								mgr = owm.weather_manager ()
-								try:
-									observation = mgr.weather_at_place (place)
-									w = observation.weather
-									temperature = w.temperature ('celsius')['temp']
-									temp = math.floor (temperature)
-									sender (id , "@id" + str (
-										id) + "(Смотри), в городе " + place.title () + " сейчас: " + str (
-										temp) + " по Цельсию!")
-								except NotFoundError:
-									id = event.user_id
-									sender (id , "Ошибка при поиске места!>.<")
-
-
-							else:
-								sender (id , 'Что дальше?')
+							mgr = owm.weather_manager ()
+							try:
+								observation = mgr.weather_at_place (place)
+								w = observation.weather
+								temperature = w.temperature ('celsius')['temp']
+								temp = math.floor (temperature)
+								sender (id , "@id" + str (id) + "(Смотри), в городе " + place.title () + " сейчас: " + str (temp) + " по Цельсию!")
 								break
-			else:
-				id = event.user_id
-				for event in longpoll.listen ():
-					if event.type == VkEventType.MESSAGE_NEW:
-						if event.to_me:
-							r = randint (0,3)
-							if r == 0:
-								sender (id, 'Я тебя не понял!:(')
-								break
-							elif r == 1:
-								sender (id, 'Прости, можно попроще?')
-								break
-							elif r == 2:
-								sender (id, 'Я тебя не понимаю. Повтори пожалуйста!')
+							except NotFoundError:
+								id = event.user_id
+								sender (id , "Ошибка при поиске места!>.<")
 								break
 	continue
 
